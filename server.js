@@ -34,7 +34,7 @@ app.get('/api/notes', (req, res) => {
     });
 });
 
-// Get route to specific note in db.json (not 100% necessary, but maybe for future development)
+// Get route to specific note in db.json (not 100% necessary now, but maybe for future development)
 app.get('/api/notes/:id', (req, res) => {
     const requestedId = req.params.id
     for (let i = 0; i < dbData.length; i++) {
@@ -64,13 +64,10 @@ app.post('/api/notes', (req, res) => {
                     (writeErr) =>
                         writeErr
                             ? console.error(writeErr)
-                            : console.info('Successfully updated!'));
+                            : console.info(`Successfully created new note with ID ${newNote.id}!`));
             }
         });
-
-        const response = { status: 'success', body: newNote };
-        console.log(response);
-        res.status(201).json(response);
+        res.status(201).json();
     } else {
         res.status(500).json('Error posting');
     }
@@ -93,7 +90,7 @@ app.delete('/api/notes/:id', (req, res) => {
             break;
         }
     }
-    return res.json('No match found');
+    // return res.json('No match found');
 });
 
 // Wildcard route 

@@ -11,7 +11,7 @@ const app = express();
 // Middleware methods:
 app.use(express.json());
 // Keep or delete??????
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // Import db.json
@@ -26,10 +26,15 @@ app.get('/', (req, res) =>
 app.get('/notes', (req, res) =>
     res.sendFile(path.join(__dirname, 'public/notes.html')));
 
-// Get route to all notes in db.json
-app.get('/api/notes', (req, res) => res.json(dbData));
+// Get route to all notes in db.json (including newly added)
+app.get('/api/notes', (req, res) => {
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        const parsedNotes = JSON.parse(data);
+        res.json(parsedNotes);
+    });
+});
 
-// Get route to specific note in db.json
+// Get route to specific note in db.json (not 100% necessary, but maybe for future development)
 app.get('/api/notes/:id', (req, res) => {
     const requestedId = req.params.id
     for (let i = 0; i < dbData.length; i++) {

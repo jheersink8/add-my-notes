@@ -5,11 +5,6 @@
         "id": "7e556480-7bac-43ee-ba5b-572393ce6a2d"
     },
     {
-        "title": "Test",
-        "text": "Test",
-        "id": "e287613d-3af5-44ea-93e0-abe844601748"
-    },
-    {
         "title": "Test2",
         "text": "Test2",
         "id": "c5ddea89-1de4-46cd-b304-82952c3454d6"
@@ -28,25 +23,5 @@
         "title": "asdf",
         "text": "asdfasd",
         "id": "0d96ae65-119f-4b42-a0b1-e11c680655d5"
-    },
-    {
-        "title": "weeeee",
-        "text": "eeeeeeeeew",
-        "id": "27d7b6f4-1463-4fbc-a377-abf0e5193a83"
-    },
-    {
-        "title": "aaaa",
-        "text": "aaaa",
-        "noteId": "518645a1-d5e5-4fff-aaa9-7ab7bab4ad20"
-    },
-    {
-        "title": "this is a test",
-        "text": "It work",
-        "noteId": "35d21587-6cf0-4780-9057-0af03948edda"
-    },
-    {
-        "title": "asasas",
-        "text": "asasas",
-        "noteId": "8251937b-4887-4af1-ba37-45967cc9565d"
     }
 ]

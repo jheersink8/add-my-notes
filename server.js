@@ -20,15 +20,25 @@ const dbData = require('./db/db.json')
 
 // -------------ROUTING DEFINITIONS------------- //
 app.get('/', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/index.html'))
+    res.sendFile(path.join(__dirname, '/public/index.html'))
 );
 // Routing to notes folder
 app.get('/notes', (req, res) =>
     res.sendFile(path.join(__dirname, 'public/notes.html')));
 
-// Route db.json
+// Get route to all notes in db.json
 app.get('/api/notes', (req, res) => res.json(dbData));
 
+// Get route to specific note in db.json
+app.get('/api/notes/:id', (req, res) => {
+    const requestedId = req.params.id
+    for (let i = 0; i < dbData.length; i++) {
+        if (requestedId === dbData[i].id) {
+            return res.json(dbData[i])
+        }
+    }
+    return res.json('No match found');
+});
 
 // Write new note data to db.json file
 app.post('/api/notes', (req, res) => {
@@ -37,7 +47,7 @@ app.post('/api/notes', (req, res) => {
         const newNote = {
             title,
             text,
-            noteId: uuidv4()
+            id: uuidv4()
         }
         fs.readFile('./db/db.json', 'utf8', (err, data) => {
             if (err) {
@@ -59,6 +69,26 @@ app.post('/api/notes', (req, res) => {
     } else {
         res.status(500).json('Error posting');
     }
+});
+
+app.delete('/api/notes/:id', (req, res) => {
+    const requestedId = req.params.id;
+    for (let i = 0; i < dbData.length; i++) {
+        if (requestedId === dbData[i].id) {
+            dbData.splice(i, 1);
+            fs.writeFile('./db/db.json', JSON.stringify(dbData, null, 4), (writeErr) => {
+                if (writeErr) {
+                    console.error(writeErr);
+                    res.status(500).json({ error: 'Failure' });
+                } else {
+                    console.info('Success!');
+                    res.json({ status: 'success', message: 'Note deleted' });
+                }
+            });
+            break;
+        }
+    }
+    return res.json('No match found');
 });
 
 // Wildcard route 

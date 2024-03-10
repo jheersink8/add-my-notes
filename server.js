@@ -1,24 +1,25 @@
 // Import Express.js and Node.js package to 'path
 const express = require('express');
 const path = require('path');
+
 // Bring node.js FS module into script and uuid
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+
 // Define port number
 const PORT = process.env.port || 3000;
 const app = express();
 
 // Middleware methods:
 app.use(express.json());
-// Keep or delete??????
-// app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // Import db.json
-const dbData = require('./db/db.json')
+const dbData = require('./db/db.json');
+const { json } = require('body-parser');
 
 
-// -------------ROUTING DEFINITIONS------------- //
+// -------------GET ROUTING DEFINITIONS------------- //
 app.get('/', (req, res) =>
     res.sendFile(path.join(__dirname, '/public/index.html'))
 );
@@ -45,8 +46,10 @@ app.get('/api/notes/:id', (req, res) => {
     return res.json('No match found');
 });
 
+// -------------POST ROUTING DEFINITIONS------------- //
 // Write new note data to db.json file
 app.post('/api/notes', (req, res) => {
+    // Verify user input exists
     const { title, text } = req.body
     if (title && text) {
         const newNote = {
@@ -54,43 +57,53 @@ app.post('/api/notes', (req, res) => {
             text,
             id: uuidv4()
         }
+        // Read json file
         fs.readFile('./db/db.json', 'utf8', (err, data) => {
             if (err) {
                 console.error(err);
             } else {
                 const parsedNote = JSON.parse(data);
                 parsedNote.push(newNote);
+                // Write new notes to json file
                 fs.writeFile('./db/db.json', JSON.stringify(parsedNote, null, 4),
                     (writeErr) =>
                         writeErr
                             ? console.error(writeErr)
-                            : console.info(`Successfully created new note with ID ${newNote.id}!`));
+                            : console.info(`Successfully created new note with title ${newNote.title}!`));
             }
         });
-        res.status(201).json();
-    } else {
-        res.status(500).json('Error posting');
+        // Read new/updated json file to output to client
+        fs.readFile('./db/db.json', 'utf8', (err, data) => {
+            const parsedNotes = JSON.parse(data);
+            res.json(parsedNotes);
+        });
     }
 });
 
+// -------------DELETE ROUTING DEFINITIONS------------- //
 app.delete('/api/notes/:id', (req, res) => {
-    const requestedId = req.params.id;
-    for (let i = 0; i < dbData.length; i++) {
-        if (requestedId === dbData[i].id) {
-            dbData.splice(i, 1);
-            fs.writeFile('./db/db.json', JSON.stringify(dbData, null, 4), (writeErr) => {
-                if (writeErr) {
-                    console.error(writeErr);
-                    res.status(500).json({ error: 'Failure' });
-                } else {
-                    console.info('Success!');
-                    res.json({ status: 'success', message: 'Note deleted' });
-                }
-            });
-            break;
+    // Read json file
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        // Delete targeted note
+        const jsonData = JSON.parse(data);
+        const requestedId = req.params.id;
+        for (let i = 0; i < jsonData.length; i++) {
+            if (requestedId === jsonData[i].id) {
+                jsonData.splice(i, 1);
+            }
         }
-    }
-    // return res.json('No match found');
+        // Write to db.json file 
+        fs.writeFile('./db/db.json', JSON.stringify(jsonData, null, 4),
+            (err) =>
+                err
+                    ? console.error(err)
+                    : console.info(`Successfully deleted note`));
+    })
+    // Read and responde with newest json file
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        const parsedNotes = JSON.parse(data);
+        res.json(parsedNotes);
+    })
 });
 
 // Wildcard route 

@@ -1,17 +1,22 @@
 [
     {
-        "title": "It's working",
-        "text": "So cool!",
-        "id": "11022722-35f4-416e-85ff-5b23f25314b7"
+        "title": "Go Shopping",
+        "text": "-Apples\n-Oranges\n-Chips",
+        "id": "43bbbe9e-1a34-4558-993d-72230d3f2de9"
     },
     {
-        "title": "Go run",
-        "text": "Abc",
-        "id": "74f41b52-ef89-45f4-a7d5-968e3c24b0fb"
+        "title": "Exercise ",
+        "text": "-Run\n-Lift",
+        "id": "51aa0942-733b-423d-9b03-52817fe97460"
     },
     {
-        "title": "Fixed",
-        "text": "it",
-        "id": "e368a37d-4652-478d-ad19-11aaafc51f34"
+        "title": "Drink Water",
+        "text": "16oz. minimum ",
+        "id": "3c802e23-7188-4e55-b594-a15c0dbedbbb"
+    },
+    {
+        "title": "Call Mom",
+        "text": "-At least for 5 minutes ",
+        "id": "09a9f65a-58f6-4ea7-9be1-35213506f163"
     }
 ]

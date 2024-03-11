@@ -7,7 +7,7 @@ const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
 // Define port number
-const PORT = process.env.port || 3000;
+const PORT = process.env.PORT || 3001;
 const app = express();
 
 // Middleware methods:
